@@ -45,7 +45,7 @@ int main(int argc, const char * argv[]) {
 
     cout << "Creating output text file..." << endl;
     char filename[20];
-    for(int j = 1; j < NUM_METHODS; j++)
+    for(int j = 0; j < NUM_METHODS; j++)
     {
       matrix1 = solver(x0, timeSpan, j, NUM_VARIABLES);
 
