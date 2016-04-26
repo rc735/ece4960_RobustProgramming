@@ -29,46 +29,55 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
     //set initial condition
     matrix1[0].push_back(0);
     double x[num_x];
+    double phi[num_x];
     for(int i = 0; i < num_x; i++)
     {
       x[i] = x_guess[i];
       matrix1[i+1].push_back(x_guess[i]);
+
+      //initialize phi
+      phi[i] = 0;
     }
     
     //iterate
-    double timei0, phi, h, h_old, error, R, cur_time = H;
+    double timei0, h, h_old, error, R, cur_time = H;
     h_old = H;
     h = H;
     for (int i = 1; cur_time <= t_final; i++) {
         matrix1[0].push_back(cur_time);
         timei0 = matrix1[0][i];
-        phi = 0;                 //increment value(s), now choose function
+        //phi = 0;                 //increment value(s), now choose function
         //h = H;
         
         switch (methodChoice) {
             case FORWARD_EULER:
                 cur_time += H;
-                phi = Feuler(x, timei0, num_x);
+                //phi = Feuler(x, timei0, num_x);
+                Feuler(phi, x, timei0, num_x);
                 break;
 
             case BACKWARD_EULER:
                 cur_time += H;
-                phi = Beuler(x, timei0, num_x);
+                //phi = Beuler(x, timei0, num_x);
+                Beuler(phi, x, timei0, num_x);
                 break;
-
+/*
             case TRAPEZOIDAL:
                 cur_time += H;
-                phi = trapezoidal(x,timei0, num_x);
+                //phi = trapezoidal(x,timei0, num_x);
+                trapezoidal(phi, x, timei0, num_x);
                 break;
 
             case RUNGE_KUTTA0:
                 cur_time += H;
-                phi = RK34woAdapt(x, timei0, num_x);
+                //phi = RK34woAdapt(x, timei0, num_x);
+                RK34woAdapt(phi, x, timei0, num_x);
                 break;
 
             case RUNGE_KUTTA1:
                 error = 0;
-                phi = RK34wAdapt(x, timei0, error, h, num_x);
+                //phi = RK34wAdapt(x, timei0, error, h, num_x);
+                RK34wAdapt(phi, x, timei0, error, h, num_x);
                 R = ERROR_TOL/error;
                 if (R > 2.0 || R < 0.5) {
                     h = GAMMA*h_old*pow((ERROR_TOL/error),1.0/3.0);
@@ -81,14 +90,14 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
                 cout << "h: " << h << endl;
                 h_old = h;
                 break;
-
+*/
             default:
                 break;
         }
         //x should be a vector of dependent variables
         for(int j = 0; j < num_x; j++)
         {
-          x[j] += phi*h;
+          x[j] += phi[j]*h;
           matrix1[j+1].push_back(x[j]);
         }
     }

@@ -14,16 +14,16 @@
 
 #include "define.h"
 
-double f(const double*, double, int);
+void f(double*, const double*, double, int);
 
-double Feuler(const double*, double, int);
+void Feuler(double*, const double*, double, int);
 
-double Beuler(const double*, double, int);
+void Beuler(double*, const double*, double, int);
 
-double trapezoidal(const double*, double, int);
-
+//double trapezoidal(const double*, double, int);
+/*
 double RK34woAdapt(const double*, double, int);
 
-double RK34wAdapt(const double*, double, double &, double h, int);
+double RK34wAdapt(const double*, double, double &, double h, int);*/
 
 #endif /* methods_hpp */

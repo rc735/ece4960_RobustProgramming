@@ -13,48 +13,58 @@ using namespace std;
 
 
 //function f for validation -- can be anything
-double f(const double* x, double t, int num_x)
+void f(double* phi, const double* x, double t, int num_x)
 {
-    return 4*exp(0.8*t) - 0.5*x[0];
+    phi[0] = 4*exp(0.8*t) - 0.5*x[0];
+    //return 4*exp(0.8*t) - 0.5*x[0];
     //return pow(t, 4)*sin(2*t) - pow(t, 2) + 4*pow(t, 3) + (2/t)*x[0];
 }
 
 
 //forward euler
-double Feuler(const double* x, double t, int num_x)
+void Feuler(double* phi, const double* x, double t, int num_x)
 {
-    return f(x,t, num_x);
+    f(phi, x,t, num_x);
 }
 
 //backward euler
-double Beuler(const double* x, double t, int num_x)
+void Beuler(double* phi, const double* x, double t, int num_x)
 {
+    double temp_phi[num_x];     //maybe not needed; can be replaced by temp_x
     double temp_x[num_x];
+    f(temp_phi, x, t, num_x);
     for(int i = 0; i < num_x; i++)
     {
-      temp_x[i] = x[i] + f(x, t, num_x)*H;
+      temp_x[i] = x[i] + temp_phi[i]*H;
     }
-    return f(temp_x,t+H, num_x);
+    f(phi, temp_x, t+H, num_x);
 }
-
+/*
 //trapezoidal
-double trapezoidal(const double* x, double t, int num_x)
+void trapezoidal(double* phi, const double* x, double t, int num_x)
 {
-    double dxdt0 = f(x,t, num_x);
+    double dxdt0[num_x];
+    f(dxdt0, x, t, num_x);
 
     double temp_x[num_x];
     for(int i = 0; i < num_x; i++)
     {
-      temp_x[i] = x[i] + dxdt0*H;
+      temp_x[i] = x[i] + dxdt0[i]*H;
     }
-    double dxdt1 = f(temp_x,t+H, num_x);
-    return (dxdt0+dxdt1)/2.0;
-}
+    double dxdt1[num_x];
+    f(dxdt1, temp_x,t+H, num_x);
 
-double RK34woAdapt(const double* x, double t, int num_x)
+    for(int i = 0; i < num_x; i++)
+    {
+      phi[i] = (dxdt0[i] + dxdt1[i])/2.0;
+    }
+}*/
+/*
+void RK34woAdapt(double* phi, const double* x, double t, int num_x)
 {
     //implement RK34
-    double k1, k2, k3, k4, RK3, RK4;
+    double k1[num_x], k2[num_x], k3[num_x], k4[num_x];
+    double RK3[num_x], RK4[num_x];
     
     //k1
     k1 = f(x,t, num_x);
@@ -124,4 +134,4 @@ double RK34wAdapt(const double* x, double t, double & error, double h, int num_x
     return RK4;
 }
 
-
+*/
