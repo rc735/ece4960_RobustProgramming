@@ -61,7 +61,7 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
                 //phi = Beuler(x, timei0, num_x);
                 Beuler(phi, x, timei0, num_x);
                 break;
-/*
+
             case TRAPEZOIDAL:
                 cur_time += H;
                 //phi = trapezoidal(x,timei0, num_x);
@@ -87,10 +87,10 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
                     exit(1);
                 }
                 cur_time += h;
-                cout << "h: " << h << endl;
+                //cout << "h: " << h << endl;
                 h_old = h;
                 break;
-*/
+
             default:
                 break;
         }

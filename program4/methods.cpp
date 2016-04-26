@@ -15,8 +15,8 @@ using namespace std;
 //function f for validation -- can be anything
 void f(double* phi, const double* x, double t, int num_x)
 {
-  //phi[0] = 4*exp(0.8*t) - 0.5*x[0];
-	
+  phi[0] = 4*exp(0.8*t) - 0.5*x[0];
+/*	
   double R = 10000; //10k Ohms or 10000 Ohms
 	double C = 1e-12; //1pF or 1e-12 Farads
 	double i; //calculate the current based on time in 20ns periods
@@ -24,7 +24,7 @@ void f(double* phi, const double* x, double t, int num_x)
 	//1-10ns - constant current at 0.1mA
 	//10-11ns - linear ramp-down from 0.1mA to 0mA
 	//11-20ns - 0mA current
-	double time_in_period = t%20;
+	double time_in_period = t20;
 	if (time_in_period <= 1.0) {
 		i = time_in_period * 0.0001;
 	} else if (time_in_period > 1.0 && time_in_period <= 10.0) {
@@ -38,7 +38,7 @@ void f(double* phi, const double* x, double t, int num_x)
 	phi[0] = -(2/(C*R))*x[0] + (1/(C*R))*x[1] + i/C;
 	phi[1] = (1/(C*R))*x[0] - (2/(C*R))*x[1];
     //return 4*exp(0.8*t) - 0.5*x[0];
-    //return pow(t, 4)*sin(2*t) - pow(t, 2) + 4*pow(t, 3) + (2/t)*x[0];
+    //return pow(t, 4)*sin(2*t) - pow(t, 2) + 4*pow(t, 3) + (2/t)*x[0];*/
 }
 
 //forward euler
@@ -59,7 +59,7 @@ void Beuler(double* phi, const double* x, double t, int num_x)
     }
     f(phi, temp_x, t+H, num_x);
 }
-/*
+
 //trapezoidal
 void trapezoidal(double* phi, const double* x, double t, int num_x)
 {
@@ -78,8 +78,8 @@ void trapezoidal(double* phi, const double* x, double t, int num_x)
     {
       phi[i] = (dxdt0[i] + dxdt1[i])/2.0;
     }
-}*/
-/*
+}
+
 void RK34woAdapt(double* phi, const double* x, double t, int num_x)
 {
     //implement RK34
@@ -87,71 +87,82 @@ void RK34woAdapt(double* phi, const double* x, double t, int num_x)
     double RK3[num_x], RK4[num_x];
     
     //k1
-    k1 = f(x,t, num_x);
+    f(k1, x, t, num_x);
 
     //k2
     double temp_x[num_x];
     for(int i = 0; i < num_x; i++)
     {
-      temp_x[i] = x[i] + 0.5*k1*H;
+      temp_x[i] = x[i] + 0.5*k1[i]*H;
     }
-    k2 = f(temp_x,t+0.5*H, num_x);
+    f(k2, temp_x, t+0.5*H, num_x);
 
     //k3
     for(int i = 0; i < num_x; i++)
     {
-      temp_x[i] = x[i] + 0.75*k2*H;
+      temp_x[i] = x[i] + 0.75*k2[i]*H;
     }
-    k3 = f(temp_x,t+0.75*H, num_x);
+    f(k3, temp_x, t+0.75*H, num_x);
 
     //k4
     for(int i = 0; i < num_x; i++)
     {
-      temp_x[i] = x[i] + k3*H;
+      temp_x[i] = x[i] + k3[i]*H;
     }
-    k4 = f(temp_x, t+H, num_x);            //what about saving this for next time step
+    f(k4, temp_x, t+H, num_x);            //what about saving this for next time step
 
-    RK3 = (k1+ 4*k2 + k3)/6;
-    RK4 = (7*k1 + 6*k2 + 8*k3 + 3*k4)/24;
-    
-    return RK4;
+    //RK3 = (k1+ 4*k2 + k3)/6;
+    //RK4 = (7*k1 + 6*k2 + 8*k3 + 3*k4)/24;
+    for(int i = 0; i < num_x; i++)
+    {
+      RK3[i] = (k1[i] + 4*k2[i] + k3[i])/6; // TODO: should be changed to /6.0 instead
+      RK4[i] = (7*k1[i] + 6*k2[i] + 8*k3[i] + 3*k4[i])/24; // TODO: should be changed to /24.0
+      phi[i] = RK4[i];
+    }
 }
 
-double RK34wAdapt(const double* x, double t, double & error, double h, int num_x)
+void RK34wAdapt(double* phi, const double* x, double t, double & error, double h, int num_x)
 {
     //implement RK34
-    double k1, k2, k3, k4, RK3, RK4;
+    double k1[num_x], k2[num_x], k3[num_x], k4[num_x];
+    double RK3[num_x], RK4[num_x];
 
     //k1
-    k1 = f(x,t, num_x);
+    f(k1, x, t, num_x);
 
     //k2
     double temp_x[num_x];
     for(int i = 0; i < num_x; i++)
     {
-      temp_x[i] = x[i] + 0.5*k1*h;
+      temp_x[i] = x[i] + 0.5*k1[i]*h;
     }
-    k2 = f(temp_x,t+0.5*h, num_x);
+    f(k2, temp_x, t+0.5*h, num_x);
 
     //k3
     for(int i = 0; i < num_x; i++)
     {
-      temp_x[i] = x[i] + 0.75*k2*h;
+      temp_x[i] = x[i] + 0.75*k2[i]*h;
     }
-    k3 = f(temp_x,t+0.75*h, num_x);
+    f(k3, temp_x, t+0.75*h, num_x);
 
     //k4
     for(int i = 0; i < num_x; i++)
     {
-      temp_x[i] = x[i] + k3*h;
+      temp_x[i] = x[i] + k3[i]*h;
     }
-    k4 = f(temp_x, t+h, num_x);            //what about saving this for next time step
+    f(k4, temp_x, t+h, num_x);            //what about saving this for next time step
 
-    RK3 = (k1+ 4*k2 + k3)/6;
-    RK4 = (7*k1 + 6*k2 + 8*k3 + 3*k4)/24;
-    error = RK4-RK3;    //how do i implement tolerance with time stepping
-    //cout << "error: " << error << endl;
-    return RK4;
+    //RK3 = (k1+ 4*k2 + k3)/6;
+    //RK4 = (7*k1 + 6*k2 + 8*k3 + 3*k4)/24;
+    //error = RK4-RK3;    //how do i implement tolerance with time stepping
+    error = 0;
+    for(int i = 0; i < num_x; i++)
+    {
+      RK3[i] = (k1[i] + 4*k2[i] + k3[i])/6;     //TODO change to 6.0
+      RK4[i] = (7*k1[i] + 6*k2[i] + 8*k3[i] + 3*k4[i])/24;    //TODO: change to 24.0
+      phi[i] = RK4[i];
+      error += RK4[i] - RK3[i];
+    }
+    error /= (double)num_x;
 }
 
-*/

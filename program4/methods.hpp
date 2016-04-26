@@ -20,10 +20,10 @@ void Feuler(double*, const double*, double, int);
 
 void Beuler(double*, const double*, double, int);
 
-//double trapezoidal(const double*, double, int);
-/*
-double RK34woAdapt(const double*, double, int);
+void trapezoidal(double*, const double*, double, int);
 
-double RK34wAdapt(const double*, double, double &, double h, int);*/
+void RK34woAdapt(double*, const double*, double, int);
+
+void RK34wAdapt(double*, const double*, double, double &, double h, int);
 
 #endif /* methods_hpp */

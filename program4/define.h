@@ -17,7 +17,7 @@
 
 #define GAMMA           0.5
 #define ERROR_TOL       1e-2
-#define H               0.2e-9
+#define H               0.1//0.2e-9
 #define P               4
 
 #define NUM_METHODS     5   //number of methods to iterate through
