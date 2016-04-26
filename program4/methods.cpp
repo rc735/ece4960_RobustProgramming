@@ -24,19 +24,21 @@ void f(double* phi, const double* x, double t, int num_x)
 	//1-10ns - constant current at 0.1mA
 	//10-11ns - linear ramp-down from 0.1mA to 0mA
 	//11-20ns - 0mA current
-	double time_in_period = fmod(t,20);
-	if (time_in_period <= 1.0) {
+	double time_in_period = fmod(t,20e-9);
+	if (time_in_period <= 1.0e-9) {
 		i = time_in_period * 0.0001;
-	} else if (time_in_period > 1.0 && time_in_period <= 10.0) {
+	} else if (time_in_period > 1.0e-9 && time_in_period <= 10.0e-9) {
 		i = 0.0001;
-	} else if (time_in_period > 10.0 && time_in_period <= 11.0) {
-		i = (11.0-time_in_period) * 0.0001;
+	} else if (time_in_period > 10.0e-9 && time_in_period <= 11.0e-9) {
+		i = (11.0e-9-time_in_period) * 0.0001;
 	} else {
 		i = 0;
 	}
 	
-	phi[0] = -(2/(C*R))*x[0] + (1/(C*R))*x[1] + i/C;
-	phi[1] = (1/(C*R))*x[0] - (2/(C*R))*x[1];
+	//phi[0] = -(2/(C*R))*x[0] + (1/(C*R))*x[1] + i/C;
+	phi[0] = -x[0]/(R*C) - (x[0]-x[1])/(R*C) + i/C;
+	//phi[1] = (1/(C*R))*x[0] - (2/(C*R))*x[1];
+	phi[1] = -x[1]/(R*C) - (x[1]-x[0])/(R*C);
     //return 4*exp(0.8*t) - 0.5*x[0];
     //return pow(t, 4)*sin(2*t) - pow(t, 2) + 4*pow(t, 3) + (2/t)*x[0];*/
 }
