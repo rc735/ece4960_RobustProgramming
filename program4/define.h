@@ -17,11 +17,11 @@
 
 #define GAMMA           0.5
 #define ERROR_TOL       1e-2
-#define H               0.1//0.2e-9
+#define H               1e-9//0.1
 #define P               4
 
 #define NUM_METHODS     5   //number of methods to iterate through
-#define NUM_VARIABLES   1   //size of x
+#define NUM_VARIABLES   2   //size of x
 #define NUM_FUNCTIONS   1   //size of f
 
 #endif /* define_h */

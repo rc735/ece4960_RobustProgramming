@@ -15,16 +15,16 @@ using namespace std;
 //function f for validation -- can be anything
 void f(double* phi, const double* x, double t, int num_x)
 {
-  phi[0] = 4*exp(0.8*t) - 0.5*x[0];
-/*	
-  double R = 10000; //10k Ohms or 10000 Ohms
+  	//phi[0] = 4*exp(0.8*t) - 0.5*x[0];
+
+  	double R = 10000; //10k Ohms or 10000 Ohms
 	double C = 1e-12; //1pF or 1e-12 Farads
 	double i; //calculate the current based on time in 20ns periods
 	//0-1ns - linear ramp-up from 0 to 0.1mA
 	//1-10ns - constant current at 0.1mA
 	//10-11ns - linear ramp-down from 0.1mA to 0mA
 	//11-20ns - 0mA current
-	double time_in_period = t20;
+	double time_in_period = fmod(t,20);
 	if (time_in_period <= 1.0) {
 		i = time_in_period * 0.0001;
 	} else if (time_in_period > 1.0 && time_in_period <= 10.0) {
