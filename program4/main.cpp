@@ -21,8 +21,8 @@ int main(int argc, const char * argv[]) {
     
     matrix matrix1;
     
-    double x0[NUM_VARIABLES] = {2.0};
-    double timeSpan = 7.0;
+    double x0[NUM_VARIABLES] = {0.0, 0.0};
+    double timeSpan = 100e-9;
 
     /** ORIGINAL FILE MAKER
     matrix1 = solver(x0, timeSpan, FORWARD_EULER);

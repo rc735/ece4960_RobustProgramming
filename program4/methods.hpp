@@ -14,7 +14,7 @@
 
 #include "define.h"
 
-double f(const double*, double, int);
+void f(double*, const double*, double, int);
 
 double Feuler(const double*, double, int);
 
