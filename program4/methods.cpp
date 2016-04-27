@@ -117,8 +117,8 @@ void RK34woAdapt(double* phi, const double* x, double t, int num_x)
     //RK4 = (7*k1 + 6*k2 + 8*k3 + 3*k4)/24;
     for(int i = 0; i < num_x; i++)
     {
-      RK3[i] = (k1[i] + 4*k2[i] + k3[i])/6; // TODO: should be changed to /6.0 instead
-      RK4[i] = (7*k1[i] + 6*k2[i] + 8*k3[i] + 3*k4[i])/24; // TODO: should be changed to /24.0
+      RK3[i] = (k1[i] + 4.0*k2[i] + k3[i])/6.0;
+      RK4[i] = (7.0*k1[i] + 6.0*k2[i] + 8.0*k3[i] + 3.0*k4[i])/24.0;
       phi[i] = RK4[i];
     }
 }
@@ -160,8 +160,8 @@ void RK34wAdapt(double* phi, const double* x, double t, double & error, double h
     error = 0;
     for(int i = 0; i < num_x; i++)
     {
-      RK3[i] = (k1[i] + 4*k2[i] + k3[i])/6;     //TODO change to 6.0
-      RK4[i] = (7*k1[i] + 6*k2[i] + 8*k3[i] + 3*k4[i])/24;    //TODO: change to 24.0
+      RK3[i] = (k1[i] + 4.0*k2[i] + k3[i])/6.0;
+      RK4[i] = (7.0*k1[i] + 6.0*k2[i] + 8.0*k3[i] + 3.0*k4[i])/24.0;
       phi[i] = RK4[i];
       error += RK4[i] - RK3[i];
     }
