@@ -80,7 +80,7 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
                 RK34wAdapt(phi, x, timei0, error, h, num_x);
                 R = ERROR_TOL/error;
                 if (R > 2.0 || R < 0.5) {
-                    h = GAMMA*h_old*pow((ERROR_TOL/error),1.0/3.0);
+                    h = GAMMA*h_old*pow(R,1.0/3.0);
                 }
                 if (h <= 0) {
                     cout << "ERROR: time step is 0" << endl;

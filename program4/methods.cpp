@@ -11,12 +11,34 @@
 
 using namespace std;
 
+/**
+ * generateId - utilizes the Enz-Krummenacher-Vittoz model to calculate
+ *              the current, Id
+ *  @param Vgs        gate-source voltage
+ *  @param Vds        drain-source voltage
+ *  @param Is         initial current
+ *  @param k          kappa
+ *  @param Vth        threshold voltage
+ *  @return           the drain current
+ *
+ * (Source is connected to Bulk)
+ */
+double Id(double Vgs, double Vds,
+                  double Is,  double k,   double Vth)
+{
+    return (Is*pow(log(1.0+exp(k*(Vgs-Vth)/(2.0*VT))),2.0)
+            - Is*pow(log(1.0+exp((k*(Vgs-Vth)-Vds)/(2.0*VT))),2.0));
+}
 
 //function f for validation -- can be anything
 void f(double* phi, const double* x, double t, int num_x)
 {
-  	//phi[0] = 4*exp(0.8*t) - 0.5*x[0];
-
+	//task 3 and 4
+	double Is = 5e-6; //5 micro amps
+	double k = 0.7;	  //kappa
+	double Vth = 1.5; //threshold voltage
+	
+	double Vdd = 5;
   	double R = 10000; //10k Ohms or 10000 Ohms
 	double C = 1e-12; //1pF or 1e-12 Farads
 	double i; //calculate the current based on time in 20ns periods
@@ -24,23 +46,34 @@ void f(double* phi, const double* x, double t, int num_x)
 	//1-10ns - constant current at 0.1mA
 	//10-11ns - linear ramp-down from 0.1mA to 0mA
 	//11-20ns - 0mA current
-	double time_in_period = fmod(t,20e-9);
-	if (time_in_period <= 1.0e-9) {
+	t = t * 1e9;	//convert time to ns
+	double time_in_period = fmod(t,20);
+	if (time_in_period <= 1.0) {
 		i = time_in_period * 0.0001;
-	} else if (time_in_period > 1.0e-9 && time_in_period <= 10.0e-9) {
+	} else if (time_in_period > 1.0 && time_in_period <= 10.0) {
 		i = 0.0001;
-	} else if (time_in_period > 10.0e-9 && time_in_period <= 11.0e-9) {
-		i = (11.0e-9-time_in_period) * 0.0001;
+	} else if (time_in_period > 10.0 && time_in_period <= 11.0) {
+		i = (11.0-time_in_period) * 0.0001;
 	} else {
 		i = 0;
 	}
 	
-	//phi[0] = -(2/(C*R))*x[0] + (1/(C*R))*x[1] + i/C;
-	phi[0] = -x[0]/(R*C) - (x[0]-x[1])/(R*C) + i/C;
-	//phi[1] = (1/(C*R))*x[0] - (2/(C*R))*x[1];
-	phi[1] = -x[1]/(R*C) - (x[1]-x[0])/(R*C);
-    //return 4*exp(0.8*t) - 0.5*x[0];
-    //return pow(t, 4)*sin(2*t) - pow(t, 2) + 4*pow(t, 3) + (2/t)*x[0];*/
+	if (TASK_NUM == 1) {
+		//task 2
+		phi[0] = 4*exp(0.8*t) - 0.5*x[0];
+	} else if (TASK_NUM == 2) {
+		//task 3
+		phi[0] = -x[0]/(R*C) - (x[0]-x[1])/(R*C) + i/C;
+		phi[1] = -x[1]/(R*C) - (x[1]-x[0])/(R*C);
+	} else if (TASK_NUM == 3) {
+		//task 4
+		//TODO: compute vin from i using thevenin relation
+		phi[0] = -x[0]/(R*C) + i/(C);
+		phi[1] = -Id(x[0],x[1],Is, k, Vth)/C - x[1]/(R*C) + Vdd/(R*C);
+	} else {
+		cout << "TASK_NUM invalid. Check \"define.h\" for correction." << endl;
+		exit(1);
+	}
 }
 
 //forward euler
