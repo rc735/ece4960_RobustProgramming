@@ -26,4 +26,6 @@ void RK34woAdapt(double*, const double*, double, int);
 
 void RK34wAdapt(double*, const double*, double, double &, double h, int);
 
+double normNum(double* x, int num_x);
+
 #endif /* methods_hpp */

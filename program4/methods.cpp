@@ -46,8 +46,8 @@ void f(double* phi, const double* x, double t, int num_x)
 	//1-10ns - constant current at 0.1mA
 	//10-11ns - linear ramp-down from 0.1mA to 0mA
 	//11-20ns - 0mA current
-	t = t * 1e9;	//convert time to ns
-	double time_in_period = fmod(t,20);
+	double t_new = t * 1e9;	//convert time to ns
+	double time_in_period = fmod(t_new,20);
 	if (time_in_period <= 1.0) {
 		i = time_in_period * 0.0001;
 	} else if (time_in_period > 1.0 && time_in_period <= 10.0) {
@@ -57,10 +57,10 @@ void f(double* phi, const double* x, double t, int num_x)
 	} else {
 		i = 0;
 	}
-	
+
 	if (TASK_NUM == 1) {
 		//task 2
-		phi[0] = 4*exp(0.8*t) - 0.5*x[0];
+		phi[0] = 4.0*exp(0.8*t) - 0.5*x[0];
 	} else if (TASK_NUM == 2) {
 		//task 3
 		phi[0] = -x[0]/(R*C) - (x[0]-x[1])/(R*C) + i/C;
@@ -148,12 +148,17 @@ void RK34woAdapt(double* phi, const double* x, double t, int num_x)
 
     //RK3 = (k1+ 4*k2 + k3)/6;
     //RK4 = (7*k1 + 6*k2 + 8*k3 + 3*k4)/24;
+    double error = 0;
     for(int i = 0; i < num_x; i++)
     {
       RK3[i] = (k1[i] + 4.0*k2[i] + k3[i])/6.0;
       RK4[i] = (7.0*k1[i] + 6.0*k2[i] + 8.0*k3[i] + 3.0*k4[i])/24.0;
       phi[i] = RK4[i];
+      
+      // error = x_3rd - x_4th
+      error += pow((-5*k1[i] + 6*k2[i] + 8*k3[i] - 9*k4[i]) * H / 72.0, 2.0);
     }
+    error = sqrt(error);
 }
 
 void RK34wAdapt(double* phi, const double* x, double t, double & error, double h, int num_x)
@@ -196,8 +201,21 @@ void RK34wAdapt(double* phi, const double* x, double t, double & error, double h
       RK3[i] = (k1[i] + 4.0*k2[i] + k3[i])/6.0;
       RK4[i] = (7.0*k1[i] + 6.0*k2[i] + 8.0*k3[i] + 3.0*k4[i])/24.0;
       phi[i] = RK4[i];
-      error += RK4[i] - RK3[i];
+
+      // error = x_3rd - x_4th
+      error += pow((-5*k1[i] + 6*k2[i] + 8*k3[i] - 9*k4[i]) * h / 72.0, 2.0);
     }
-    error /= (double)num_x;
+    error = sqrt(error);
+    //cout << "error = " << error << endl;
 }
 
+
+double normNum(double* x, int num_x)
+{
+  double ans = 0;
+  for(int i = 0; i < num_x; i++)
+  {
+    ans += pow(x[i], 2.0);
+  }
+  return sqrt(ans);
+}

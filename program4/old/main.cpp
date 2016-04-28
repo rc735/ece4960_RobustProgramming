@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
     matrix matrix1;
     
     double x0 = 2.0;
-    double timeSpan = 7.0;
+    double timeSpan = 100e-9;
     matrix1 = solver(x0, timeSpan, BACKWARD_EULER);
     
     //output matrix to file to graph

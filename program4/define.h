@@ -16,14 +16,25 @@
 #define RUNGE_KUTTA1    4
 
 #define GAMMA           0.5
-#define ERROR_TOL       1e-2
-#define H               0.2e-9//0.1
+#define ERROR_TOL       1e-7
 #define P               4
-#define VT				0.026
+#define VT				      0.026
 
-#define TASK_NUM		2	//1-validation, 2-RC, 3-EKV Common source amp
+#define TASK_NUM		    2	  //1-validation, 2-RC, 3-EKV Common source amp
 #define NUM_METHODS     5   //number of methods to iterate through
-#define NUM_VARIABLES   2   //size of x
-#define NUM_FUNCTIONS   1   //size of f
+
+
+#if TASK_NUM==1
+#define NUM_VARIABLES   1   //size of x
+#define H               0.1
+
+#elif TASK_NUM==2
+#define NUM_VARIABLES   2
+#define H               0.2e-9
+
+#elif TASK_NUM==3
+#define NUM_VARIABLES   3
+#define H               0.2e-9
+#endif
 
 #endif /* define_h */

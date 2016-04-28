@@ -21,46 +21,51 @@ int main(int argc, const char * argv[]) {
     
     matrix matrix1;
     
+#if TASK_NUM==1
+    double x0[NUM_VARIABLES] = {2.0};
+    double timeSpan = 7;
+
+#elif TASK_NUM==2
     double x0[NUM_VARIABLES] = {0.0, 0.0};
     double timeSpan = 100e-9;
-	
-    /** ORIGINAL FILE MAKER
-    matrix1 = solver(x0, timeSpan, FORWARD_EULER);
-    
-    //output matrix to file to graph
-    cout << "creating output text file..." << endl;
-    ofstream myfile;
-    myfile.open ("output.txt");
-    if (myfile.is_open())
-    { // ok, proceed with output
-        cout  << "file is open." << endl;
-        for (int i=0; i < (int)matrix1[0].size(); i++) {
-            myfile << matrix1[0][i] << "\t" << matrix1[1][i] << "\n";
-        }
-        myfile.close();
-    } else {
-        cout << "could not open file." << endl;
-    }
-    */
 
-    cout << "Creating output text file..." << endl;
+#elif TASK_NUM==3
+    double x0[NUM_VARIABLES] = {0.0, 0.0};
+    double timeSpan = 100e-9;
+
+#else
+    cout << "ERROR - choose TASK_NUM in define.h" << endl;
+    exit(1);
+#endif
+
+    //Create Output Files for Plotting
+    cout << "Creating output text files..." << endl << endl;
     char filename[20];
     for(int j = 0; j < NUM_METHODS; j++)
     {
       matrix1 = solver(x0, timeSpan, j, NUM_VARIABLES);
+      
+      // for verification purposes
+      cout << "NUM ITERATIONS:\t" << matrix1[0].size() << endl;
+      cout << "FINAL VALUES:\t";
+      for(int i = 0; i < NUM_VARIABLES+1; i++)
+      {
+        cout << matrix1[i][matrix1[0].size()-1] << "\t";
+      }
+      cout << endl;
 
       ofstream myfile;
       sprintf(filename, "output_%d.txt", j);
       myfile.open(filename);
       if(myfile.is_open())
       {
-        cout << "writing to file" << endl;
+        cout << "writing to: " << filename << endl << endl;
         for(int i = 0; i < (int) matrix1[0].size(); i++)
         {
-			for (int k = 0; k < NUM_VARIABLES + 1; k++) {
-				myfile << matrix1[k][i] << "\t";
-			}
-           	myfile << "\n";
+			    for (int k = 0; k < NUM_VARIABLES + 1; k++) {
+				    myfile << matrix1[k][i] << "\t";
+			    }
+          myfile << "\n";
         }
         myfile.close();
       }

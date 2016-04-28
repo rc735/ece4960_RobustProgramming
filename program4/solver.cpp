@@ -36,7 +36,7 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
       matrix1[i+1].push_back(x_guess[i]);
 
       //initialize phi
-      phi[i] = 0;
+      phi[i] = 0;//increment value(s), now choose function
     }
     
     //iterate
@@ -46,8 +46,6 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
     for (int i = 1; cur_time <= t_final; i++) {
         matrix1[0].push_back(cur_time);
         timei0 = matrix1[0][i];
-        //phi = 0;                 //increment value(s), now choose function
-        //h = H;
         
         switch (methodChoice) {
             case FORWARD_EULER:
@@ -76,11 +74,26 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
 
             case RUNGE_KUTTA1:
                 error = 0;
-                //phi = RK34wAdapt(x, timei0, error, h, num_x);
                 RK34wAdapt(phi, x, timei0, error, h, num_x);
-                R = ERROR_TOL/error;
+
+                //1e-15 is the absolute tolerance
+                //cout << error << " ==> " << (ERROR_TOL * normNum(x, num_x) + 1e-15) << endl;
+                //R = error / (ERROR_TOL * normNum(x, num_x) + 1e-15);
+                R = error / normNum(x, num_x);
+                //cout << "R =  " << R << endl;
+                /*
                 if (R > 2.0 || R < 0.5) {
-                    h = GAMMA*h_old*pow(R,1.0/3.0);
+                    //h = GAMMA*h_old*pow(R,1.0/3.0);
+                    h = h/R;
+                    cout << "h = " << h_old << " --> " << h << endl;
+                }*/
+                if(R > 1e-2)
+                {
+                  h = h/2.0;
+                }
+                else if(R < ERROR_TOL)
+                {
+                  h = 2.0*h;
                 }
                 if (h <= 0) {
                     cout << "ERROR: time step is 0" << endl;
