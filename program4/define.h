@@ -20,7 +20,7 @@
 #define P               4
 #define VT				      0.026
 
-#define TASK_NUM		    2	  //1-validation, 2-RC, 3-EKV Common source amp
+#define TASK_NUM		    3	  //1-validation, 2-RC, 3-EKV Common source amp
 #define NUM_METHODS     5   //number of methods to iterate through
 
 
@@ -33,7 +33,7 @@
 #define H               0.2e-9
 
 #elif TASK_NUM==3
-#define NUM_VARIABLES   3
+#define NUM_VARIABLES   2
 #define H               0.2e-9
 #endif
 

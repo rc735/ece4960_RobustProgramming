@@ -30,7 +30,7 @@ int main(int argc, const char * argv[]) {
     double timeSpan = 100e-9;
 
 #elif TASK_NUM==3
-    double x0[NUM_VARIABLES] = {0.0, 0.0};
+    double x0[NUM_VARIABLES] = {2.5, 2.5};
     double timeSpan = 100e-9;
 
 #else
