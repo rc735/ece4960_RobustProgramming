@@ -10,45 +10,92 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cstdlib>
 
 #include "define.h"
 #include "solver.hpp"
 
 using namespace std;
 
+//global variables
+int task_num;
+double H;
+int num_variables;
+
+/**
+ * main()
+ *    @param argv[1]      the task number to execute
+ *                            1 --> validation
+ *                            2 --> RC
+ *                            3 --> EKV common source amp
+ */
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    
+    // check for number of arguments
+    if(argc != 2)
+    {
+      cout << "ERROR - choose a task to perform" << endl;
+      cout << "\t(1 -> validation; 2 -> RC; 3 -> CS Amp)" << endl;
+      exit(1);
+    }
+
+    // initialize global variables and initial guess "x0"
+    task_num = atoi(argv[1]);
+    double * xtemp;
+    double timeSpan;
+    if(task_num == 1)             // validation
+    {
+      xtemp = new double[1];
+      xtemp[1] = 2.0;
+      timeSpan = 7;
+      H = 0.1;
+      num_variables = 1;
+    }
+    else if(task_num == 2)        // RC
+    {
+      xtemp = new double[2];
+      xtemp[0] = 0.0;
+      xtemp[1] = 0.0;
+      timeSpan = 100e-9;
+      H = 0.2e-9;
+      num_variables = 2;
+    }
+    else if(task_num == 3)        // CS amp
+    {
+      xtemp = new double[2];
+      xtemp[0] = 2.5;
+      xtemp[1] = 2.5;
+      timeSpan = 100e-9;
+      H = 0.2e-9;
+      num_variables = 2;
+    }
+    else
+    {
+      cout << "ERROR - Invalid Task Selection" << endl;
+      cout << "\t(1 -> validation; 2 -> RC; 3 -> CS Amp)" << endl;
+      exit(1);
+    }
+    double x0[num_variables];
+    for(int i = 0; i < num_variables; i++)
+    {
+      x0[i] = xtemp[i];
+    }
+    delete[] xtemp;
+    xtemp = NULL;
+
+    // stores all time steps and values of x at each time step
     matrix matrix1;
-    
-#if TASK_NUM==1
-    double x0[NUM_VARIABLES] = {2.0};
-    double timeSpan = 7;
-
-#elif TASK_NUM==2
-    double x0[NUM_VARIABLES] = {0.0, 0.0};
-    double timeSpan = 100e-9;
-
-#elif TASK_NUM==3
-    double x0[NUM_VARIABLES] = {2.5, 2.5};
-    double timeSpan = 100e-9;
-
-#else
-    cout << "ERROR - choose TASK_NUM in define.h" << endl;
-    exit(1);
-#endif
 
     //Create Output Files for Plotting
     cout << "Creating output text files..." << endl << endl;
     char filename[20];
     for(int j = 0; j < NUM_METHODS; j++)
     {
-      matrix1 = solver(x0, timeSpan, j, NUM_VARIABLES);
+      matrix1 = solver(x0, timeSpan, j, num_variables);
       
       // for verification purposes
       cout << "NUM ITERATIONS:\t" << matrix1[0].size() << endl;
       cout << "FINAL VALUES:\t";
-      for(int i = 0; i < NUM_VARIABLES+1; i++)
+      for(int i = 0; i < num_variables+1; i++)
       {
         cout << matrix1[i][matrix1[0].size()-1] << "\t";
       }
@@ -62,7 +109,7 @@ int main(int argc, const char * argv[]) {
         cout << "writing to: " << filename << endl << endl;
         for(int i = 0; i < (int) matrix1[0].size(); i++)
         {
-			    for (int k = 0; k < NUM_VARIABLES + 1; k++) {
+			    for (int k = 0; k < num_variables+1; k++) {
 				    myfile << matrix1[k][i] << "\t";
 			    }
           myfile << "\n";

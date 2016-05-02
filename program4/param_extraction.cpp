@@ -84,26 +84,10 @@ void newtonMethod(double * x, double t, double h,
     // generate Jacobian
     for(int i = 0; i < num_x; i++)
     {
-      // for the diagonal elements
-      x_temp[i]  += dx[i];
-      x_temp2[i] -= dx[i];
-
-      f(phi,  x_temp,  t+h, num_x);
-      f(phi2, x_temp2, t+h, num_x);
-      //J[i][i] = ((x[i] + h*phi[i] - x_temp[i])
-      //          - (x[i] + h*phi2[i] - x_temp2[i])) / (2.0*dx[i]);
-      J[i][i] = (newton_f(x[i], x_temp[i], h, phi_i[i], phi[i], task)
-                  - newton_f(x[i], x_temp2[i], h, phi_i[i], phi2[i], task))
-                  / (2.0*dx[i]);
-
-      x_temp[i]  = x[i];
-      x_temp2[i] = x[i];
 
       // for non-diagonal elements
       for(int j = 0; j < num_x; j++)
       {
-        if(i != j)
-        {
           x_temp[j]  += dx[j];
           x_temp2[j] -= dx[j];
 
@@ -116,10 +100,8 @@ void newtonMethod(double * x, double t, double h,
                       / (2.0*dx[j]);
 
           // resetting parameters for next iteration
-          x_temp[j] = x[j];
-          x_temp[j] = x[j];
-          
-        }
+          x_temp[j]  = x[j];
+          x_temp2[j] = x[j];
       }
     }
 
@@ -183,7 +165,7 @@ void newtonMethod(double * x, double t, double h,
     }
     topCnt++;
   }
-  
+
   // deallocating assigned memory and updating x with x_next
   for(int i = 0; i < num_x; i++)
   {

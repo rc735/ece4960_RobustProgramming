@@ -56,19 +56,22 @@ void f(double* phi, const double* x, double t, int num_x)
 		i = 0;
 	}
 
-	if (TASK_NUM == 1) {
+	if (task_num == 1) {
 		//task 2
 		phi[0] = 4.0*exp(0.8*t) - 0.5*x[0];
-	} else if (TASK_NUM == 2) {
+	}
+  else if (task_num == 2) {
 		//task 3
 		phi[0] = -x[0]/(R*C) - (x[0]-x[1])/(R*C) + i/C;
 		phi[1] = -x[1]/(R*C) - (x[1]-x[0])/(R*C);
-	} else if (TASK_NUM == 3) {
+	}
+  else if (task_num == 3) {
 		//task 4
 		//TODO: compute vin from i using thevenin relation
 		phi[0] = -x[0]/(R*C) + i/(C);
 		phi[1] = -Id(x[0],x[1],Is, k, Vth)/C - x[1]/(R*C) + Vdd/(R*C);
-	} else {
+	}
+  else {
 		cout << "TASK_NUM invalid. Check \"define.h\" for correction." << endl;
 		exit(1);
 	}
