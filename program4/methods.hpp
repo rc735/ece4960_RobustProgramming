@@ -6,26 +6,31 @@
 //  Copyright © 2016 Matthew Magaldi. All rights reserved.
 //
 
-#ifndef methods_hpp
-#define methods_hpp
+#ifndef METHODS_H
+#define METHODS_H
 
 #include <stdio.h>
 #include <cmath>
+#include <iostream>
 
 #include "define.h"
+#include "param_extraction.h"
+
+using namespace std;
+
 
 void f(double*, const double*, double, int);
 
-void Feuler(double*, const double*, double, int);
+void Feuler(double*, double, int);
 
-void Beuler(double*, const double*, double, int);
+void Beuler(double*, double, int);
 
-void trapezoidal(double*, const double*, double, int);
+void trapezoidal(double*, double, int);
 
-void RK34woAdapt(double*, const double*, double, int);
+void RK34woAdapt(double*, double, int);
 
-void RK34wAdapt(double*, const double*, double, double &, double h, int);
+void RK34wAdapt(double*, double, double &, double h, int);
 
 double normNum(double* x, int num_x);
 
-#endif /* methods_hpp */
+#endif /* METHODS_H */

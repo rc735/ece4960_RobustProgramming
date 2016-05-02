@@ -7,9 +7,7 @@
 //
 
 #include "methods.hpp"
-#include <iostream>
 
-using namespace std;
 
 /**
  * generateId - utilizes the Enz-Krummenacher-Vittoz model to calculate
@@ -77,47 +75,39 @@ void f(double* phi, const double* x, double t, int num_x)
 }
 
 //forward euler
-void Feuler(double* phi, const double* x, double t, int num_x)
+//    x_{i+1} = x_{i} + phi_{i}*h
+void Feuler(double* x, double t, int num_x)
 {
-    f(phi, x,t, num_x);
+  double phi[num_x];
+  f(phi, x, t, num_x);
+  for(int i = 0; i < num_x; i++)
+  {
+    x[i] += phi[i]*H;
+  }
 }
+
 
 //backward euler
-void Beuler(double* phi, const double* x, double t, int num_x)
+//    x_{i+1} = x_{i} + f(x_{i+1},t_{i+1}) * h
+void Beuler(double* x, double t, int num_x)
 {
-    double temp_phi[num_x];     //maybe not needed; can be replaced by temp_x
-    double temp_x[num_x];
-    f(temp_phi, x, t, num_x);
-    for(int i = 0; i < num_x; i++)
-    {
-      temp_x[i] = x[i] + temp_phi[i]*H;
-    }
-    f(phi, temp_x, t+H, num_x);
+  newtonMethod(x, t, H, num_x, BACKWARD_EULER);
 }
+
 
 //trapezoidal
-void trapezoidal(double* phi, const double* x, double t, int num_x)
+//    x_{i+1} = x_{i} + h * (f(x_{i+1},t_{i+1}) + f(x_{i+1},t_{i+1}))/2
+void trapezoidal(double* x, double t, int num_x)
 {
-    double dxdt0[num_x];
-    f(dxdt0, x, t, num_x);
-
-    double temp_x[num_x];
-    for(int i = 0; i < num_x; i++)
-    {
-      temp_x[i] = x[i] + dxdt0[i]*H;
-    }
-    double dxdt1[num_x];
-    f(dxdt1, temp_x,t+H, num_x);
-
-    for(int i = 0; i < num_x; i++)
-    {
-      phi[i] = (dxdt0[i] + dxdt1[i])/2.0;
-    }
+  newtonMethod(x, t, H, num_x, TRAPEZOIDAL);
 }
 
-void RK34woAdapt(double* phi, const double* x, double t, int num_x)
+
+//Runge-Kutta w/o time step adaptivity
+void RK34woAdapt(double* x, double t, int num_x)
 {
     //implement RK34
+    double phi[num_x];
     double k1[num_x], k2[num_x], k3[num_x], k4[num_x];
     double RK3[num_x], RK4[num_x];
     
@@ -146,12 +136,12 @@ void RK34woAdapt(double* phi, const double* x, double t, int num_x)
     }
     f(k4, temp_x, t+H, num_x);            //what about saving this for next time step
 
-    //RK3 = (k1+ 4*k2 + k3)/6;
+    //RK3 = (2*k1+ 3*k2 + 4*k3)/9;
     //RK4 = (7*k1 + 6*k2 + 8*k3 + 3*k4)/24;
     double error = 0;
     for(int i = 0; i < num_x; i++)
     {
-      RK3[i] = (k1[i] + 4.0*k2[i] + k3[i])/6.0;
+      RK3[i] = (2.0*k1[i] + 3.0*k2[i] + 4.0*k3[i])/9.0;
       RK4[i] = (7.0*k1[i] + 6.0*k2[i] + 8.0*k3[i] + 3.0*k4[i])/24.0;
       phi[i] = RK4[i];
       
@@ -159,11 +149,18 @@ void RK34woAdapt(double* phi, const double* x, double t, int num_x)
       error += pow((-5*k1[i] + 6*k2[i] + 8*k3[i] - 9*k4[i]) * H / 72.0, 2.0);
     }
     error = sqrt(error);
+
+  for(int i = 0; i < num_x; i++)
+  {
+    x[i] += phi[i]*H;
+  }
+
 }
 
-void RK34wAdapt(double* phi, const double* x, double t, double & error, double h, int num_x)
+void RK34wAdapt(double* x, double t, double & error, double h, int num_x)
 {
     //implement RK34
+    double phi[num_x];
     double k1[num_x], k2[num_x], k3[num_x], k4[num_x];
     double RK3[num_x], RK4[num_x];
 
@@ -198,7 +195,7 @@ void RK34wAdapt(double* phi, const double* x, double t, double & error, double h
     error = 0;
     for(int i = 0; i < num_x; i++)
     {
-      RK3[i] = (k1[i] + 4.0*k2[i] + k3[i])/6.0;
+      RK3[i] = (2.0*k1[i] + 3.0*k2[i] + 4.0*k3[i])/9.0;
       RK4[i] = (7.0*k1[i] + 6.0*k2[i] + 8.0*k3[i] + 3.0*k4[i])/24.0;
       phi[i] = RK4[i];
 
@@ -207,6 +204,11 @@ void RK34wAdapt(double* phi, const double* x, double t, double & error, double h
     }
     error = sqrt(error);
     //cout << "error = " << error << endl;
+  
+  for(int i = 0; i < num_x; i++)
+  {
+    x[i] += phi[i]*h;
+  }
 }
 
 
