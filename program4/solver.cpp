@@ -51,30 +51,30 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
             case FORWARD_EULER:
                 cur_time += H;
                 //phi = Feuler(x, timei0, num_x);
-                Feuler(phi, x, timei0, num_x);
+                Feuler(x, timei0, num_x);
                 break;
 
             case BACKWARD_EULER:
                 cur_time += H;
                 //phi = Beuler(x, timei0, num_x);
-                Beuler(phi, x, timei0, num_x);
+                Beuler(x, timei0, num_x);
                 break;
 
             case TRAPEZOIDAL:
                 cur_time += H;
                 //phi = trapezoidal(x,timei0, num_x);
-                trapezoidal(phi, x, timei0, num_x);
+                trapezoidal(x, timei0, num_x);
                 break;
 
             case RUNGE_KUTTA0:
                 cur_time += H;
                 //phi = RK34woAdapt(x, timei0, num_x);
-                RK34woAdapt(phi, x, timei0, num_x);
+                RK34woAdapt(x, timei0, num_x);
                 break;
 
             case RUNGE_KUTTA1:
                 error = 0;
-                RK34wAdapt(phi, x, timei0, error, h, num_x);
+                RK34wAdapt(x, timei0, error, h, num_x);
 
                 //1e-15 is the absolute tolerance
                 //cout << error << " ==> " << (ERROR_TOL * normNum(x, num_x) + 1e-15) << endl;
@@ -106,11 +106,11 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
 
             default:
                 break;
-        }
+        } 
         //x should be a vector of dependent variables
         for(int j = 0; j < num_x; j++)
         {
-          x[j] += phi[j]*h;
+          //x[j] += phi[j]*h;
           matrix1[j+1].push_back(x[j]);
         }
     }
