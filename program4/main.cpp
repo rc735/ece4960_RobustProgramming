@@ -45,7 +45,7 @@ int main(int argc, const char * argv[]) {
     if(task_num == 1)             // validation
     {
       xtemp = new double[1];
-      xtemp[1] = 2.0;
+      xtemp[0] = 2.0;
       timeSpan = 7;
       H = 0.1;
       num_variables = 1;
