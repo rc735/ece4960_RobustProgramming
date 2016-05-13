@@ -1,6 +1,6 @@
 //
 //  define.h
-//  Program4
+//  Program5
 //
 //  Created by Matthew Magaldi on 4/20/16.
 //  Copyright © 2016 Matthew Magaldi. All rights reserved.

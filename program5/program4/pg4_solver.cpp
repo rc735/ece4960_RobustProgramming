@@ -114,7 +114,6 @@ matrix solver(const double* x_guess, double t_final, int methodChoice, int num_x
           matrix1[j+1].push_back(x[j]);
         }
     }
-    
     return matrix1;
 }
 

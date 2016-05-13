@@ -84,13 +84,13 @@ int main(int argc, const char * argv[])
   // a[0] = c2/c1
   // a[1] = tau1
   // a[2] = tau2
-  double guess[SIZE_PARAM] = {1.5, 2e4*1e-12, 2e4*1e-12};
+  double guess[SIZE_PARAM] = {1.5, 2e-10, 2e-10};
   double a_final[SIZE_PARAM];
   double Smeas[SIZE_MEAS], x[SIZE_MEAS];
   for(int i = 0; i < SIZE_MEAS; i ++)
   {
     x[i] = matrix1[0][i+idx] - 20.0005e-6;
-    Smeas[i] = matrix1[2][i];
+    Smeas[i] = matrix1[2][i+idx];
   }
   newtonMethod_pg3(guess, a_final, x, Smeas, SIZE_PARAM, SIZE_MEAS);
   cout << "FINAL NEWTON: ";
