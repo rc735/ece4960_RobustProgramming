@@ -1,0 +1,55 @@
+diff program4/define.h program5/program4/define.h
+3c3
+< //  Program4
+---
+> //  Program5
+11a12,25
+> 
+> //from program3/defines.h
+> #define SIZE_PARAM      3
+> #define SIZE_MEAS       500
+> 
+> #define PERCENT_ERR     10
+> 
+> #define PERTURB_NUM     1e-3
+> #define THRESHOLD       1e-8
+> 
+> 
+> //fromm program4/define.h
+> #define NUM_VAR         2
+> 
+19c33
+< #define ERROR_TOL       1e-7
+---
+> #define ERROR_TOL       5e-8
+24a39,40
+> 
+> 
+28d43
+< extern int num_variables;
+Only in program4/: imgs
+Only in program4/: main.cpp
+Only in program4/: main.o
+Only in program4/: matout
+Only in program4/: matrix_ops.cpp
+Only in program4/: matrix_ops.o
+Only in program4/: matrix_ops_test.cpp
+Only in program4/: methods.cpp
+Only in program4/: methods.o
+Only in program4/: old
+Only in program4/: old_output_files
+Only in program4/: out
+Only in program4/: output_0.txt
+Only in program4/: output_1.txt
+Only in program4/: output_2.txt
+Only in program4/: output_3.txt
+Only in program4/: output_4.txt
+Only in program4/: output.txt
+Only in program4/: param_extraction.cpp
+Only in program4/: param_extraction.o
+Only in program5/program4/: pg4_matrix_ops.cpp
+Only in program5/program4/: pg4_methods.cpp
+Only in program5/program4/: pg4_param_extraction.cpp
+Only in program5/program4/: pg4_solver.cpp
+Only in program4/: solver.cpp
+Only in program4/: solver.o

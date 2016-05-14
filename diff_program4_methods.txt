@@ -1,0 +1,22 @@
+41a42
+>   /*-------  Current Source for Program 4 ---------------
+57a59,77
+>   */
+> 
+>   // current source for program 5
+> 	double i; //calculate the current based on time in 20us periods
+> 	//0-0.0005us - linear ramp-up from 0 to 0.1mA
+> 	//0.0005-20.0005us - constant current at 0.1mA
+> 	//20.0005-20.001us - linear ramp-down from 0.1mA to 0mA
+> 	//20.001-40us - 0mA current
+> 	double t_new = t * 1e6;	//convert time to us
+> 	double time_in_period = fmod(t_new,40);
+> 	if (time_in_period <= 0.0005) {
+> 		i = time_in_period * 0.0001/(0.0005);
+> 	} else if (time_in_period > 0.0005 && time_in_period <= 20.0005) {
+> 		i = 0.0001;
+> 	} else if (time_in_period > 20.0005 && time_in_period <= 20.001) {
+> 		i = (20.001-time_in_period) * 0.0001/(0.0005);
+> 	} else {
+> 		i = 0;
+> 	}

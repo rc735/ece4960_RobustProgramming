@@ -1,0 +1,18 @@
+18,22c18,24
+<   double S = a[0];
+<   for(int i = 1; i < size; i++)
+<   {
+<     S += a[i] * pow(x[i-1], i);
+<   }
+---
+>   // V2(t) = c1*(exp(-t/tau1) + c2/c1 * exp(-t/tau2))
+>   //    a[0] --> a2/a1
+>   //    a[1] --> tau1
+>   //    a[2] --> tau2
+>   double c1 = 0.333333;
+>   double S = (c1*(exp(-x[0]/a[1])+a[0]*exp(-x[0]/a[2])));
+>   //cout << S << " " << x[0] << " " << a[1] << endl;
+137c139
+< void newtonMethod(double *guess, double *a_final, double *x,
+---
+> void newtonMethod_pg3(double *guess, double *a_final, double *x,

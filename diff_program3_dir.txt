@@ -1,0 +1,75 @@
+Only in program3/: backup
+diff program3/defines.h program5/program3/defines.h
+1,2c1,10
+< #ifndef DEFINES_H
+< #define DEFINES_H
+---
+> //
+> //  define.h
+> //  Program5
+> //
+> //  Created by Matthew Magaldi on 4/20/16.
+> //  Copyright © 2016 Matthew Magaldi. All rights reserved.
+> //
+> 
+> #ifndef define_h
+> #define define_h
+5,6c13,15
+< #define SIZE_PARAM      2
+< #define SIZE_MEAS       10
+---
+> //from program3/defines.h
+> #define SIZE_PARAM      3
+> #define SIZE_MEAS       500
+13d21
+< #define VT              0.026
+15c23,24
+< #endif // DEFINES_H
+---
+> //fromm program4/define.h
+> #define NUM_VAR         2
+16a26,45
+> #define FORWARD_EULER   0
+> #define BACKWARD_EULER  1
+> #define TRAPEZOIDAL     2
+> #define RUNGE_KUTTA0    3
+> #define RUNGE_KUTTA1    4
+> 
+> #define GAMMA           0.5
+> #define ERROR_TOL       5e-8
+> #define P               4
+> #define VT				      0.026
+> 
+> #define NUM_METHODS     5   //number of methods to iterate through
+> 
+> 
+> 
+> // global variables - defined in main.cpp
+> extern int task_num;
+> extern double H;
+> 
+> #endif /* define_h */
+Only in program3/: main.cpp
+Only in program3/: main.o
+Only in program3/: matrix_ops.cpp
+Only in program3/: matrix_ops.o
+Only in program3/: matt
+Only in program3/: matt2
+Only in program3/: model_transistor.cpp
+Only in program3/: model_transistor.o
+Only in program3/: out
+Only in program3/: outputCharacteristics.txt
+Only in program3/: param_extraction.cpp
+diff program3/param_extraction.h program5/program3/param_extraction.h
+61c61
+< void newtonMethod(double *guess, double *a_final, double *x,
+---
+> void newtonMethod_pg3(double *guess, double *a_final, double *x,
+Only in program3/: param_extraction.o
+Only in program3/: param_extraction_orig.cpp
+Only in program3/: param_extraction_orig.h
+Only in program5/program3/: pg3_matrix_ops.cpp
+Only in program5/program3/: pg3_model_transistor.cpp
+Only in program5/program3/: pg3_param_extraction.cpp
+Only in program3/: results.txt
+Only in program3/: transconductance.txt
